@@ -1,7 +1,26 @@
 ﻿Public Class Form1
     Dim mainDataset As New List(Of String())
     Dim externalDataset As New List(Of String())
-    Dim columnCount As UInt16 = 0
+    Dim columnCount As Integer = 0
+
+    'Regresa un arreglo tipo List(Of String), según un índice de un dataset, Ej:
+    'Dim columna As List(Of String) = getDatasetColumn(mainDataset, 3)
+    Private Function getDatasetColumn(ByVal dataset As List(Of String()), ByVal index As Integer) As List(Of String)
+        Dim iRow As New List(Of String)
+
+        For Each row In dataset
+            iRow.Add(row.GetValue(index))
+        Next
+        Return iRow
+    End Function
+
+    'Reemplaza una columna del dataset, por un arreglo tipo List(Of String), según un índice de un dataset, Ej:
+    'replaceDatasetColumn(mainDataset, columna, 3)
+    Private Sub replaceDatasetColumn(ByRef dataset As List(Of String()), ByVal column As List(Of String), ByVal index As Integer)
+        For i As Integer = 0 To column.Count - 1
+            dataset(i).SetValue(column(i), index)
+        Next
+    End Sub
 
     Private Sub rbSameDataset_CheckedChanged(sender As Object, e As EventArgs) Handles rbSameDataset.CheckedChanged
         gbSameDataset.Enabled = gbExternalDataset.Enabled
@@ -48,5 +67,4 @@
         Loop Until fileLine Is Nothing
         fileReader.Close()
     End Sub
-
 End Class
