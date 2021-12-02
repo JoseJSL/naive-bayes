@@ -165,7 +165,8 @@
     Public Function frecuencias_iguales(ByRef arreglo() As String, ByRef arreglo1() As String) As Integer()
         Dim arreglo_nuevo()()
         Dim arreglo_ordenado()()
-        Dim largo, n_categorias, rangos, n, f, aux, aux2, cat As Int32
+        Dim arreglo_FI() As Integer
+        Dim largo, n_categorias, rangos, n, f, aux, aux2, cat, m, x, l As Int32
         largo = UBound(arreglo)
         Dim array As New List(Of String())
         Dim categorias() as Integer
@@ -214,6 +215,40 @@
             End If
         Next
 
-        Return categorias
+        For i  = 0 to largo Step 1
+            arreglo_FI(i) = arreglo_ordenado(i)(0)
+        Next
+
+        l = UBound(categorias)
+
+        For i  = 0 to largo Step 1
+            n = 0
+            m = 1
+            x = 0
+            Do Until x = 1
+                While m <= l
+                    If arreglo_FI(i) < categorias(n) Then
+                        arreglo_FI(i) = m
+                        x = 1
+                    ElseIf arreglo_FI(i) >= categorias(n) And arreglo_FI(i) < categorias(n + 1) Then
+                        m = m + 1
+                        arreglo_FI(i) = m
+                        x = 1
+                    End If
+
+                    m = m + 1
+                    n = n + 1
+
+                    If m = (l - 1) And x = 0 Then
+                        arreglo_FI(i) = m + 1
+
+                        m = l
+                    End If
+                End While
+            Loop
+
+        Next
+
+        Return arreglo_FI
     End Function
 End Class
