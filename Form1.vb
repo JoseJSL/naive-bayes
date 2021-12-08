@@ -70,185 +70,50 @@
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim arreglo() As String
-
-        anchos_iguales(arreglo)
-        frecuencias_iguales(arreglo, anchos_iguales(arreglo))
-
-
+        Dim arreglo As List(Of Char) = anchos_iguales(getDatasetColumn(mainDataset,0))
+        For Each num In arreglo
+            msgBox(num)
+        Next
     End Sub
 
-    Public Function anchos_iguales(ByVal arreglo() As String) As String()
-        Dim max, min, n_intervalos, largo As Int32
-        Dim rango, numero As Double
+    Public Function anchos_iguales(ByVal arreglo As List(Of String)) As List(Of Char)
+        Dim n_intervalos As Integer
+        Dim rango, max, min As Double
+        Dim arreglo_numero As New List(Of Double)
 
 
-        n_intervalos = txtIntervals.Value
-        largo = UBound(arreglo)
-        max = 0
-        min = arreglo(0)
+        n_intervalos = CInt(txtIntervals.Value)
+        
 
-        For i = 0 To largo Step 1
-            If (arreglo(i) > max) Then
-                max = arreglo(i)
-            End If
+        For Each num In arreglo
+            arreglo_numero.add(CDbl(num))
         Next
 
-        For i = 0 To largo Step 1
-            If (arreglo(i) < min) Then
-                min = arreglo(i)
-            End If
-        Next
+        max = arreglo_numero.Max()
+        min = arreglo_numero.Min()
+
 
         rango = (max - min) / n_intervalos
 
-        Dim categorias(n_intervalos) As String
-        Dim arreglo_nuevo(largo) As String
+        Dim categorias As New List(Of Double)
+        Dim arreglo_nuevo As New List(Of Char)
+        Dim cat As Double = min
 
-        categorias(0) = min + rango
-
-        For i = 1 To n_intervalos - 1 Step 1
-            categorias(i) = categorias(i - 1) + rango
-        Next
-
-        For i = 0 To largo Step 1
-            numero = arreglo(i)
-
-            Select Case numero
-                Case (numero < categorias(0))
-                    arreglo_nuevo(i) = "A"
-                Case (numero >= categorias(0) And numero < categorias(1))
-                    arreglo_nuevo(i) = "B"
-                Case (numero >= categorias(1) And numero < categorias(2))
-                    arreglo_nuevo(i) = "C"
-                Case (numero >= categorias(2) And numero < categorias(3))
-                    arreglo_nuevo(i) = "D"
-                Case (numero >= categorias(3) And numero < categorias(4))
-                    arreglo_nuevo(i) = "E"
-                Case (numero >= categorias(4) And numero < categorias(5))
-                    arreglo_nuevo(i) = "F"
-                Case (numero >= categorias(5) And numero < categorias(6))
-                    arreglo_nuevo(i) = "G"
-                Case (numero >= categorias(6))
-                    arreglo_nuevo(i) = "H"
-            End Select
-        Next
-
-        For i = 0 To largo Step 1
-
-            Select Case arreglo_nuevo(i)
-                Case arreglo_nuevo(i) = "A"
-                    frecuencias(0) = frecuencias(0) + 1
-                Case arreglo_nuevo(i) = "B"
-                    frecuencias(1) = frecuencias(1) + 1
-                Case arreglo_nuevo(i) = "C"
-                    frecuencias(2) = frecuencias(2) + 1
-                Case arreglo_nuevo(i) = "D"
-                    frecuencias(3) = frecuencias(3) + 1
-                Case arreglo_nuevo(i) = "E"
-                    frecuencias(4) = frecuencias(4) + 1
-                Case arreglo_nuevo(i) = "F"
-                    frecuencias(5) = frecuencias(5) + 1
-                Case arreglo_nuevo(i) = "G"
-                    frecuencias(6) = frecuencias(6) + 1
-                Case arreglo_nuevo(i) = "H"
-                    frecuencias(7) = frecuencias(7) + 1
-            End Select
-
+        For i = 0 To n_intervalos - 1 Step 1
+            cat += rango
+            categorias.Add(cat)
         Next
 
 
+        For Each num In arreglo_numero
+            For i = 0 To n_intervalos - 1 Step 1
+                If num < categorias.ElementAt(i) Then
+                    arreglo_nuevo.Add(Chr(65 + i))
+                    Exit For
+                End If
+            Next
+        Next
         Return arreglo_nuevo
 
-    End Function
-
-    Public Function frecuencias_iguales(ByRef arreglo() As String, ByRef arreglo1() As String) As Integer()
-        Dim arreglo_nuevo()()
-        Dim arreglo_ordenado()()
-        Dim arreglo_FI() As Integer
-        Dim largo, n_categorias, rangos, n, f, aux, aux2, cat, m, x, l As Int32
-        largo = UBound(arreglo)
-        Dim array As New List(Of String())
-        Dim categorias() as Integer
-        Dim x As Integer
-
-
-        n_categorias = txtIntervals.Value
-        rangos = largo / n_categorias
-
-        For i As Integer = 0 To largo
-            arreglo_nuevo(i)(0) = arreglo(i)
-            arreglo_nuevo(i)(1) = arreglo1(i)
-        Next
-
-        n = -1
-        While n < largo - 1
-            n = n + 1
-            f = -1
-            While f < n
-                f = f + 1
-                If arreglo_nuevo(n)(0) < arreglo_nuevo(f)(0) Then
-                    aux = arreglo_nuevo(n)(0)
-                    aux2 = arreglo_nuevo(n)(1)
-                    arreglo_nuevo(n)(0) = arreglo_nuevo(f)(0)
-                    arreglo_nuevo(n)(1) = arreglo_nuevo(f)(1)
-                    arreglo_nuevo(f)(0) = aux
-                    arreglo_nuevo(f)(1) = aux2
-                End If
-            End While
-        End While
-
-        n = -1
-        While n < f -1
-            n = n + 1
-            arreglo_ordenado(n)(0) = arreglo_nuevo(n)(0)
-            arreglo_ordenado(n)(1) = arreglo_nuevo(n)(1)
-        End While
-
-        n = 0
-        For i As Integer = 0 To largo
-            x = arreglo_ordenado(i)(1)
-            If (x <> arreglo_ordenado(i+1)(1))
-                cat = (arreglo_ordenado(i)(0)+arreglo_ordenado(i+1)(0))/2
-                categorias(n) = cat
-                n = n + 1
-            End If
-        Next
-
-        For i  = 0 to largo Step 1
-            arreglo_FI(i) = arreglo_ordenado(i)(0)
-        Next
-
-        l = UBound(categorias)
-
-        For i  = 0 to largo Step 1
-            n = 0
-            m = 1
-            x = 0
-            Do Until x = 1
-                While m <= l
-                    If arreglo_FI(i) < categorias(n) Then
-                        arreglo_FI(i) = m
-                        x = 1
-                    ElseIf arreglo_FI(i) >= categorias(n) And arreglo_FI(i) < categorias(n + 1) Then
-                        m = m + 1
-                        arreglo_FI(i) = m
-                        x = 1
-                    End If
-
-                    m = m + 1
-                    n = n + 1
-
-                    If m = (l - 1) And x = 0 Then
-                        arreglo_FI(i) = m + 1
-
-                        m = l
-                    End If
-                End While
-            Loop
-
-        Next
-
-        Return arreglo_FI
     End Function
 End Class
