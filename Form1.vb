@@ -73,9 +73,9 @@
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim arreglo As List(Of Char) = anchos_iguales(getDatasetColumn(mainDataset,0))
+        Dim arreglo As List(Of Char) = anchos_iguales(getDatasetColumn(mainDataset, 0))
         For Each num In arreglo
-            msgBox(num)
+            MsgBox(num)
         Next
     End Sub
 
@@ -89,7 +89,7 @@
 
 
         For Each num In arreglo
-            arreglo_numero.add(CDbl(num))
+            arreglo_numero.Add(CDbl(num))
         Next
 
         max = arreglo_numero.Max()
@@ -139,7 +139,6 @@
         Next
 
     End Sub
-
 
     Private Function class_indi(ByRef clase As String) As Integer
 
