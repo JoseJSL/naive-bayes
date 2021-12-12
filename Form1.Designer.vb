@@ -33,13 +33,14 @@ Partial Class Form1
         Me.rbSameDataset = New System.Windows.Forms.RadioButton()
         Me.rbExternalDataset = New System.Windows.Forms.RadioButton()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.rbSimpleVal = New System.Windows.Forms.RadioButton()
+        Me.rbCrossVal = New System.Windows.Forms.RadioButton()
         Me.gbSameDataset = New System.Windows.Forms.GroupBox()
-        Me.txtSimplePercentge = New System.Windows.Forms.TextBox()
+        Me.txtSimplePercent = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txtIntervals = New System.Windows.Forms.NumericUpDown()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnAnalizar = New System.Windows.Forms.Button()
+        Me.cbClassAtEnd = New System.Windows.Forms.CheckBox()
         Me.gbExternalDataset.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.gbSameDataset.SuspendLayout()
@@ -52,7 +53,7 @@ Partial Class Form1
         Me.Label1.Location = New System.Drawing.Point(13, 19)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(90, 25)
+        Me.Label1.Size = New System.Drawing.Size(61, 16)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Dataset :"
         '
@@ -66,7 +67,7 @@ Partial Class Form1
         Me.txtMainRoute.Location = New System.Drawing.Point(81, 16)
         Me.txtMainRoute.Name = "txtMainRoute"
         Me.txtMainRoute.ReadOnly = True
-        Me.txtMainRoute.Size = New System.Drawing.Size(359, 30)
+        Me.txtMainRoute.Size = New System.Drawing.Size(359, 22)
         Me.txtMainRoute.TabIndex = 101
         Me.txtMainRoute.TabStop = False
         '
@@ -105,7 +106,7 @@ Partial Class Form1
         Me.txtExternalRoute.Location = New System.Drawing.Point(75, 36)
         Me.txtExternalRoute.Name = "txtExternalRoute"
         Me.txtExternalRoute.ReadOnly = True
-        Me.txtExternalRoute.Size = New System.Drawing.Size(90, 30)
+        Me.txtExternalRoute.Size = New System.Drawing.Size(90, 22)
         Me.txtExternalRoute.TabIndex = 106
         Me.txtExternalRoute.TabStop = False
         '
@@ -115,7 +116,7 @@ Partial Class Form1
         Me.Label2.Location = New System.Drawing.Point(7, 39)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(90, 25)
+        Me.Label2.Size = New System.Drawing.Size(61, 16)
         Me.Label2.TabIndex = 106
         Me.Label2.Text = "Dataset :"
         '
@@ -125,7 +126,7 @@ Partial Class Form1
         Me.rbSameDataset.Checked = True
         Me.rbSameDataset.Location = New System.Drawing.Point(18, 21)
         Me.rbSameDataset.Name = "rbSameDataset"
-        Me.rbSameDataset.Size = New System.Drawing.Size(246, 29)
+        Me.rbSameDataset.Size = New System.Drawing.Size(171, 20)
         Me.rbSameDataset.TabIndex = 2
         Me.rbSameDataset.TabStop = True
         Me.rbSameDataset.Text = "Utilizar el mismo dataset"
@@ -136,7 +137,7 @@ Partial Class Form1
         Me.rbExternalDataset.AutoSize = True
         Me.rbExternalDataset.Location = New System.Drawing.Point(323, 22)
         Me.rbExternalDataset.Name = "rbExternalDataset"
-        Me.rbExternalDataset.Size = New System.Drawing.Size(261, 29)
+        Me.rbExternalDataset.Size = New System.Drawing.Size(178, 20)
         Me.rbExternalDataset.TabIndex = 3
         Me.rbExternalDataset.Text = "Utilizar un dataset externo"
         Me.rbExternalDataset.UseVisualStyleBackColor = True
@@ -152,52 +153,52 @@ Partial Class Form1
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Pruebas"
         '
-        'RadioButton1
+        'rbSimpleVal
         '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Location = New System.Drawing.Point(6, 47)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(200, 29)
-        Me.RadioButton1.TabIndex = 5
-        Me.RadioButton1.Text = "Validación simple :"
-        Me.RadioButton1.UseVisualStyleBackColor = True
+        Me.rbSimpleVal.AutoSize = True
+        Me.rbSimpleVal.Location = New System.Drawing.Point(6, 47)
+        Me.rbSimpleVal.Name = "rbSimpleVal"
+        Me.rbSimpleVal.Size = New System.Drawing.Size(139, 20)
+        Me.rbSimpleVal.TabIndex = 5
+        Me.rbSimpleVal.Text = "Validación simple :"
+        Me.rbSimpleVal.UseVisualStyleBackColor = True
         '
-        'RadioButton2
+        'rbCrossVal
         '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Checked = True
-        Me.RadioButton2.Location = New System.Drawing.Point(6, 21)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(203, 29)
-        Me.RadioButton2.TabIndex = 4
-        Me.RadioButton2.TabStop = True
-        Me.RadioButton2.Text = "Validación cruzada"
-        Me.RadioButton2.UseVisualStyleBackColor = True
+        Me.rbCrossVal.AutoSize = True
+        Me.rbCrossVal.Checked = True
+        Me.rbCrossVal.Location = New System.Drawing.Point(6, 21)
+        Me.rbCrossVal.Name = "rbCrossVal"
+        Me.rbCrossVal.Size = New System.Drawing.Size(141, 20)
+        Me.rbCrossVal.TabIndex = 4
+        Me.rbCrossVal.TabStop = True
+        Me.rbCrossVal.Text = "Validación cruzada"
+        Me.rbCrossVal.UseVisualStyleBackColor = True
         '
         'gbSameDataset
         '
-        Me.gbSameDataset.Controls.Add(Me.txtSimplePercentge)
-        Me.gbSameDataset.Controls.Add(Me.RadioButton2)
-        Me.gbSameDataset.Controls.Add(Me.RadioButton1)
+        Me.gbSameDataset.Controls.Add(Me.txtSimplePercent)
+        Me.gbSameDataset.Controls.Add(Me.rbCrossVal)
+        Me.gbSameDataset.Controls.Add(Me.rbSimpleVal)
         Me.gbSameDataset.Location = New System.Drawing.Point(16, 98)
         Me.gbSameDataset.Name = "gbSameDataset"
         Me.gbSameDataset.Size = New System.Drawing.Size(252, 85)
         Me.gbSameDataset.TabIndex = 104
         Me.gbSameDataset.TabStop = False
         '
-        'txtSimplePercentge
+        'txtSimplePercent
         '
-        Me.txtSimplePercentge.Location = New System.Drawing.Point(145, 47)
-        Me.txtSimplePercentge.Name = "txtSimplePercentge"
-        Me.txtSimplePercentge.Size = New System.Drawing.Size(100, 30)
-        Me.txtSimplePercentge.TabIndex = 6
+        Me.txtSimplePercent.Location = New System.Drawing.Point(145, 47)
+        Me.txtSimplePercent.Name = "txtSimplePercent"
+        Me.txtSimplePercent.Size = New System.Drawing.Size(100, 22)
+        Me.txtSimplePercent.TabIndex = 6
         '
         'Label3
         '
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(13, 195)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(257, 25)
+        Me.Label3.Size = New System.Drawing.Size(176, 16)
         Me.Label3.TabIndex = 106
         Me.Label3.Text = "Intervalos de discretización :"
         '
@@ -206,26 +207,37 @@ Partial Class Form1
         Me.txtIntervals.Location = New System.Drawing.Point(195, 193)
         Me.txtIntervals.Minimum = New Decimal(New Integer() {2, 0, 0, 0})
         Me.txtIntervals.Name = "txtIntervals"
-        Me.txtIntervals.Size = New System.Drawing.Size(51, 30)
+        Me.txtIntervals.Size = New System.Drawing.Size(51, 22)
         Me.txtIntervals.TabIndex = 108
         Me.txtIntervals.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.txtIntervals.Value = New Decimal(New Integer() {2, 0, 0, 0})
         '
-        'Button1
+        'btnAnalizar
         '
-        Me.Button1.Location = New System.Drawing.Point(401, 191)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(126, 24)
-        Me.Button1.TabIndex = 109
-        Me.Button1.Text = "Analizar"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnAnalizar.Location = New System.Drawing.Point(401, 191)
+        Me.btnAnalizar.Name = "btnAnalizar"
+        Me.btnAnalizar.Size = New System.Drawing.Size(126, 24)
+        Me.btnAnalizar.TabIndex = 109
+        Me.btnAnalizar.Text = "Analizar"
+        Me.btnAnalizar.UseVisualStyleBackColor = True
+        '
+        'cbClassAtEnd
+        '
+        Me.cbClassAtEnd.AutoSize = True
+        Me.cbClassAtEnd.Location = New System.Drawing.Point(252, 194)
+        Me.cbClassAtEnd.Name = "cbClassAtEnd"
+        Me.cbClassAtEnd.Size = New System.Drawing.Size(147, 20)
+        Me.cbClassAtEnd.TabIndex = 110
+        Me.cbClassAtEnd.Text = "Clases a la derecha"
+        Me.cbClassAtEnd.UseVisualStyleBackColor = True
         '
         'Form1
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(12.0!, 25.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(535, 226)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.cbClassAtEnd)
+        Me.Controls.Add(Me.btnAnalizar)
         Me.Controls.Add(Me.txtIntervals)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.gbExternalDataset)
@@ -237,7 +249,7 @@ Partial Class Form1
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "Form1"
-        Me.Text = "Form1"
+        Me.Text = "Naive Bayes"
         Me.gbExternalDataset.ResumeLayout(False)
         Me.gbExternalDataset.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
@@ -258,14 +270,15 @@ Partial Class Form1
     Friend WithEvents rbSameDataset As RadioButton
     Friend WithEvents rbExternalDataset As RadioButton
     Friend WithEvents GroupBox1 As GroupBox
-    Friend WithEvents RadioButton1 As RadioButton
-    Friend WithEvents RadioButton2 As RadioButton
+    Friend WithEvents rbSimpleVal As RadioButton
+    Friend WithEvents rbCrossVal As RadioButton
     Friend WithEvents gbSameDataset As GroupBox
-    Friend WithEvents txtSimplePercentge As TextBox
+    Friend WithEvents txtSimplePercent As TextBox
     Friend WithEvents btnLoadExternalDataset As Button
     Friend WithEvents txtExternalRoute As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents txtIntervals As NumericUpDown
-    Friend WithEvents Button1 As Button
+    Friend WithEvents btnAnalizar As Button
+    Friend WithEvents cbClassAtEnd As CheckBox
 End Class

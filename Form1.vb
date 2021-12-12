@@ -7,17 +7,6 @@
     Dim mtz_conf As New List(Of Integer())
     Dim clases As New List(Of String)
 
-    'Regresa un arreglo tipo List(Of String), según un índice de un dataset, Ej:
-    'Dim columna As List(Of String) = getDatasetColumn(mainDataset, 3)
-    Private Function getDatasetColumn(ByVal dataset As List(Of String()), ByVal index As Integer) As List(Of String)
-        Dim iRow As New List(Of String)
-
-        For Each row In dataset
-            iRow.Add(row.GetValue(index))
-        Next
-        Return iRow
-    End Function
-
     'Reemplaza una columna del dataset, por un arreglo tipo List(Of String), según un índice de un dataset, Ej:
     'replaceDatasetColumn(mainDataset, columna, 3)
     Private Sub replaceDatasetColumn(ByRef dataset As List(Of String()), ByVal column As List(Of String), ByVal index As Integer)
@@ -72,179 +61,67 @@
         fileReader.Close()
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim arreglo As List(Of Char) = anchos_iguales(getDatasetColumn(mainDataset, 0))
-        For Each num In arreglo
-            MsgBox(num)
-        Next
-    End Sub
+    Private Sub btnAnalizar_Click(sender As Object, e As EventArgs) Handles btnAnalizar.Click
+        tryGetClasses()
 
-    Public Function anchos_iguales(ByVal arreglo As List(Of String)) As List(Of Char)
-        Dim n_intervalos As Integer
-        Dim rango, max, min As Double
-        Dim arreglo_numero As New List(Of Double)
-
-
-        n_intervalos = CInt(txtIntervals.Value)
-
-
-        For Each num In arreglo
-            arreglo_numero.Add(CDbl(num))
-        Next
-
-        max = arreglo_numero.Max()
-        min = arreglo_numero.Min()
-
-
-        rango = (max - min) / n_intervalos
-
-        Dim categorias As New List(Of Double)
-        Dim arreglo_nuevo As New List(Of Char)
-        Dim cat As Double = min
-
-        For i = 0 To n_intervalos - 1 Step 1
-            cat += rango
-            categorias.Add(cat)
-        Next
-
-
-        For Each num In arreglo_numero
-            For i = 0 To n_intervalos - 1 Step 1
-                If num < categorias.ElementAt(i) Then
-                    arreglo_nuevo.Add(Chr(65 + i))
-                    Exit For
-                End If
-            Next
-        Next
-        Return arreglo_nuevo
-
-    End Function
-
-    Private Sub calc_mtz_confu(ByRef original As List(Of String))
-
-        Dim ico, ifi As New Integer
-
-        For i = 0 To predict.Count - 1
-            If predict.ElementAt(i) = original.ElementAt(i) Then
-                ico = class_indi(predict.ElementAt(i))
-                mtzval_up(ico, ico)
-
+        If (rbSameDataset.Checked) Then
+            If (rbCrossVal.Checked) Then
+                calcWithSameDataSet(0.5, 0.5)
             Else
-                ico = class_indi(predict.ElementAt(i))
-                ifi = class_indi(original.ElementAt(i))
-                mtzval_up(ico, ifi)
+                If (Not IsNumeric(txtSimplePercent.Text)) Then
+                    txtSimplePercent.Focus()
+                    txtSimplePercent.SelectAll()
+                    MsgBox("El porcentaje solo puede contener números.", vbCritical, "Error en validación simple.")
+                    Exit Sub
+                End If
 
+                Dim trainPercent As Double = CDbl(txtSimplePercent.Text) / 100
+                calcWithSameDataSet(trainPercent, 1 - trainPercent)
             End If
+        Else
+            calcWithExternalDataset()
+        End If
+    End Sub
 
+    Private Sub calcWithSameDataSet(ByVal trainPercent As Double, ByVal testPercent As Double)
+        Dim listOfChances As New List(Of List(Of List(Of Double))) '-> I:Columna, J: Clase, K: Categoria
+        Dim datasetColumn As List(Of String)
+        Dim categoryCountPerClass As List(Of List(Of Integer))
+        Dim categoryList As List(Of Double)
+        Dim classIndex As Integer
+        Dim start = 1, minus = 1 'Si la clase está a la izquierda, empezamos en la segunda columna y terminamos en la última
+
+        If (cbClassAtEnd.Checked) Then 'Si la clase está a la derecha, empezamos en la primer columna y terminamos en la penúltima
+            start = 0
+            minus = 2
+            classIndex = clases.Count - 1
+        Else
+            classIndex = 0
+        End If
+
+        Dim classColumn = getDatasetColumn(mainDataset, classIndex)
+        For i As Integer = start To mainDataset.ElementAt(0).Count - minus
+            datasetColumn = getDatasetColumn(mainDataset, i)
+            If (IsNumeric(datasetColumn.ElementAt(i))) Then
+                calcAnchosIguales(datasetColumn, classColumn, categoryCountPerClass, categoryList, clases, CInt(txtIntervals.Text), clases.Count)
+                listOfChances.Add(calcChanceOf(classColumn, categoryCountPerClass, categoryList, clases))
+            End If
         Next
+    End Sub
+
+    Private Sub calcWithExternalDataset()
 
     End Sub
 
-    Private Function class_indi(ByRef clase As String) As Integer
-
-        For i = 0 To clases.Count - 1
-            If clases.ElementAt(i) = clase Then
-                Return i
-
+    Private Sub tryGetClasses()
+        If (Not clases.Count > 0) Then
+            Dim classArray As List(Of String) = getDatasetColumn(mainDataset, 0)
+            If (Not cbClassAtEnd.Checked) Then
+                clases = getClassList(classArray)
+            Else
+                clases = getClassList(classArray)
             End If
-        Next
-
-        Return -1
-    End Function
-
-    Private Sub mtzval_up(ByRef inc As Integer, ByRef inf As Integer)
-        Dim v As Integer = mtz_conf.ElementAt(inc).ElementAt(inf)
-
-        mtz_conf.ElementAt(inc).SetValue(v + 1, inf)
-
+        End If
     End Sub
-
-    Private Function tp(ByRef ind As Integer) As Integer
-
-        Return mtz_conf.ElementAt(ind).ElementAt(ind)
-    End Function
-
-    Private Function tn(ByRef ind As Integer) As Integer
-        Dim trun As Integer = 0
-
-        For Each columna In mtz_conf
-            For Each fila In columna
-                trun += fila
-            Next
-        Next
-
-        trun -= (tp(ind) + fp(ind) + fn(ind))
-
-        Return trun
-    End Function
-
-    Private Function fp(ByRef inf As Integer) As Integer
-        Dim falp As Integer = 0
-
-        For inc = 0 To clases.Count - 1
-            falp += mtz_conf.ElementAt(inf).ElementAt(inc)
-        Next
-        falp -= tp(inf)
-
-        Return falp
-    End Function
-
-    Private Function fn(ByRef inc As Integer) As Integer
-        Dim faln As Integer = 0
-
-        For inf = 0 To clases.Count - 1
-            faln += mtz_conf.ElementAt(inc).ElementAt(inf)
-        Next
-        faln -= tp(inc)
-
-        Return faln
-    End Function
-
-    Private Function prec(ByRef ind As Integer) As Double
-        Dim preci As Double
-        Dim trupo As Integer
-
-        trupo = tp(ind)
-
-        preci = trupo / (trupo - fp(ind))
-
-        Return preci
-    End Function
-
-    Private Function recall(ByRef ind As Integer) As Double
-        Dim rec As Double
-        Dim trupo As Integer
-        trupo = tp(ind)
-
-        rec = trupo / (trupo - fn(ind))
-
-        Return rec
-    End Function
-
-    Private Function accuracy(ByRef indi As Integer) As Double
-        Dim accu As Double
-        Dim totalmtz, tepes As Integer
-
-        totalmtz = predict.Count
-
-        For i = 0 To clases.Count - 1
-            tepes += tp(i)
-        Next
-
-        accu = tepes / totalmtz
-
-        Return accu
-    End Function
-
-    Private Function mf1(ByRef ind As Integer) As Double
-        Dim medf, preci, recal As Double
-        preci = prec(ind)
-        recal = recall(ind)
-
-        medf = 2 * preci * recal / (preci + recal)
-
-        Return medf
-    End Function
-
 
 End Class

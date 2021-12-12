@@ -95,6 +95,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="NaiveModule.vb" />
+    <Compile Include="Resultado.Designer.vb">
+      <DependentUpon>Resultado.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Resultado.vb">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
@@ -105,6 +112,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resultado.resx">
+      <DependentUpon>Resultado.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
