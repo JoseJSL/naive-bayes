@@ -53,7 +53,7 @@ Partial Class Form1
         Me.Label1.Location = New System.Drawing.Point(13, 19)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(61, 16)
+        Me.Label1.Size = New System.Drawing.Size(90, 25)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Dataset :"
         '
@@ -67,7 +67,7 @@ Partial Class Form1
         Me.txtMainRoute.Location = New System.Drawing.Point(81, 16)
         Me.txtMainRoute.Name = "txtMainRoute"
         Me.txtMainRoute.ReadOnly = True
-        Me.txtMainRoute.Size = New System.Drawing.Size(359, 22)
+        Me.txtMainRoute.Size = New System.Drawing.Size(359, 30)
         Me.txtMainRoute.TabIndex = 101
         Me.txtMainRoute.TabStop = False
         '
@@ -106,7 +106,7 @@ Partial Class Form1
         Me.txtExternalRoute.Location = New System.Drawing.Point(75, 36)
         Me.txtExternalRoute.Name = "txtExternalRoute"
         Me.txtExternalRoute.ReadOnly = True
-        Me.txtExternalRoute.Size = New System.Drawing.Size(90, 22)
+        Me.txtExternalRoute.Size = New System.Drawing.Size(90, 30)
         Me.txtExternalRoute.TabIndex = 106
         Me.txtExternalRoute.TabStop = False
         '
@@ -116,7 +116,7 @@ Partial Class Form1
         Me.Label2.Location = New System.Drawing.Point(7, 39)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(61, 16)
+        Me.Label2.Size = New System.Drawing.Size(90, 25)
         Me.Label2.TabIndex = 106
         Me.Label2.Text = "Dataset :"
         '
@@ -126,7 +126,7 @@ Partial Class Form1
         Me.rbSameDataset.Checked = True
         Me.rbSameDataset.Location = New System.Drawing.Point(18, 21)
         Me.rbSameDataset.Name = "rbSameDataset"
-        Me.rbSameDataset.Size = New System.Drawing.Size(171, 20)
+        Me.rbSameDataset.Size = New System.Drawing.Size(246, 29)
         Me.rbSameDataset.TabIndex = 2
         Me.rbSameDataset.TabStop = True
         Me.rbSameDataset.Text = "Utilizar el mismo dataset"
@@ -137,7 +137,7 @@ Partial Class Form1
         Me.rbExternalDataset.AutoSize = True
         Me.rbExternalDataset.Location = New System.Drawing.Point(323, 22)
         Me.rbExternalDataset.Name = "rbExternalDataset"
-        Me.rbExternalDataset.Size = New System.Drawing.Size(178, 20)
+        Me.rbExternalDataset.Size = New System.Drawing.Size(261, 29)
         Me.rbExternalDataset.TabIndex = 3
         Me.rbExternalDataset.Text = "Utilizar un dataset externo"
         Me.rbExternalDataset.UseVisualStyleBackColor = True
@@ -158,7 +158,7 @@ Partial Class Form1
         Me.rbSimpleVal.AutoSize = True
         Me.rbSimpleVal.Location = New System.Drawing.Point(6, 47)
         Me.rbSimpleVal.Name = "rbSimpleVal"
-        Me.rbSimpleVal.Size = New System.Drawing.Size(139, 20)
+        Me.rbSimpleVal.Size = New System.Drawing.Size(200, 29)
         Me.rbSimpleVal.TabIndex = 5
         Me.rbSimpleVal.Text = "Validación simple :"
         Me.rbSimpleVal.UseVisualStyleBackColor = True
@@ -169,7 +169,7 @@ Partial Class Form1
         Me.rbCrossVal.Checked = True
         Me.rbCrossVal.Location = New System.Drawing.Point(6, 21)
         Me.rbCrossVal.Name = "rbCrossVal"
-        Me.rbCrossVal.Size = New System.Drawing.Size(141, 20)
+        Me.rbCrossVal.Size = New System.Drawing.Size(203, 29)
         Me.rbCrossVal.TabIndex = 4
         Me.rbCrossVal.TabStop = True
         Me.rbCrossVal.Text = "Validación cruzada"
@@ -190,15 +190,16 @@ Partial Class Form1
         '
         Me.txtSimplePercent.Location = New System.Drawing.Point(145, 47)
         Me.txtSimplePercent.Name = "txtSimplePercent"
-        Me.txtSimplePercent.Size = New System.Drawing.Size(100, 22)
+        Me.txtSimplePercent.Size = New System.Drawing.Size(100, 30)
         Me.txtSimplePercent.TabIndex = 6
+        Me.txtSimplePercent.Text = "Porc. entr."
         '
         'Label3
         '
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(13, 195)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(176, 16)
+        Me.Label3.Size = New System.Drawing.Size(257, 25)
         Me.Label3.TabIndex = 106
         Me.Label3.Text = "Intervalos de discretización :"
         '
@@ -207,7 +208,7 @@ Partial Class Form1
         Me.txtIntervals.Location = New System.Drawing.Point(195, 193)
         Me.txtIntervals.Minimum = New Decimal(New Integer() {2, 0, 0, 0})
         Me.txtIntervals.Name = "txtIntervals"
-        Me.txtIntervals.Size = New System.Drawing.Size(51, 22)
+        Me.txtIntervals.Size = New System.Drawing.Size(51, 30)
         Me.txtIntervals.TabIndex = 108
         Me.txtIntervals.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.txtIntervals.Value = New Decimal(New Integer() {2, 0, 0, 0})
@@ -226,14 +227,14 @@ Partial Class Form1
         Me.cbClassAtEnd.AutoSize = True
         Me.cbClassAtEnd.Location = New System.Drawing.Point(252, 194)
         Me.cbClassAtEnd.Name = "cbClassAtEnd"
-        Me.cbClassAtEnd.Size = New System.Drawing.Size(147, 20)
+        Me.cbClassAtEnd.Size = New System.Drawing.Size(211, 29)
         Me.cbClassAtEnd.TabIndex = 110
         Me.cbClassAtEnd.Text = "Clases a la derecha"
         Me.cbClassAtEnd.UseVisualStyleBackColor = True
         '
         'Form1
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(12.0!, 25.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(535, 226)
         Me.Controls.Add(Me.cbClassAtEnd)
