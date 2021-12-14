@@ -1,8 +1,8 @@
 ﻿Public Class Form1
     Public mtz_conf As New List(Of List(Of Integer))
     Public clases As New List(Of String)
-    Dim mainDataset As New List(Of String())
-    Dim externalDataset As New List(Of String())
+    Public mainDataset As New List(Of String())
+    Public externalDataset As New List(Of String())
     Dim predict As New List(Of String)
 
     'Reemplaza una columna del dataset, por un arreglo tipo List(Of String), según un índice de un dataset, Ej:
@@ -33,12 +33,12 @@
                 txtExternalRoute.Text = fileOpener.FileNames.GetValue(0)
                 loadDataset(externalDataset)
             End If
-        End If
 
-        If (mainDataset.Count > 0) Then
-            If (mainDataset.ElementAt(0).Count <> externalDataset.ElementAt(0).Count) Then
-                MsgBox("La cantidad de columnas del dataset cargado es distinto al del dataset principal: operacion cancelada.", vbCritical, "Error de datasets incompatibles")
-                externalDataset = New List(Of String())
+            If (mainDataset.Count > 0) Then
+                If (mainDataset.ElementAt(0).Count <> externalDataset.ElementAt(0).Count) Then
+                    MsgBox("La cantidad de columnas del dataset cargado es distinto al del dataset principal: operacion cancelada.", vbCritical, "Error de datasets incompatibles")
+                    externalDataset = New List(Of String())
+                End If
             End If
         End If
     End Sub
@@ -117,6 +117,7 @@
         End If
 
         clases = getClassList(getDatasetColumn(mainDataset, classIndex))
+        clases.Sort()
 
         Return True
     End Function
@@ -143,12 +144,11 @@
     Private Sub calcWithSameDataSet(ByVal trainPercent As Double, ByVal testPercent As Double)
         Dim toTrain As List(Of String())
         Dim toTest As List(Of String())
-        Dim start = 1, minus = 1, classIndex = 0 'Si la clase está a la izquierda, empezamos en la segunda columna y terminamos en la última
+        Dim start = 1, minus = 1 'Si la clase está a la izquierda, empezamos en la segunda columna y terminamos en la última
 
         If (cbClassAtEnd.Checked) Then 'Si la clase está a la derecha, empezamos en la primer columna y terminamos en la penúltima
             start = 0
             minus = 2
-            classIndex = mainDataset.ElementAt(0).Count - 1
         End If
 
         'Division del dataset principal en uno para entrenamiento y otro para pruebas
@@ -177,7 +177,7 @@
         Dim toTrainClassColumn = getDatasetColumn(toTrain, classIndex)
         For i As Integer = start To toTrain.ElementAt(0).Count - minus
             datasetColumn = getDatasetColumn(toTrain, i)
-            If (IsNumeric(datasetColumn.ElementAt(i))) Then
+            If (IsNumeric(datasetColumn.ElementAt(0))) Then
                 calcAnchosIguales(datasetColumn, toTrainClassColumn, categoryCountPerClass, categoryList, clases, CInt(txtIntervals.Text), clases.Count)
             Else
                 calcDiscretizedColumn(datasetColumn, toTrainClassColumn, categoryCountPerClass, categoryList, clases, clases.Count)
@@ -190,7 +190,7 @@
         Dim toTestClassColumn = getDatasetColumn(toTest, classIndex)
         Dim predictions = calcPredictions(toTest, listOfChances, listOfCategories, clases, toTestClassColumn, start, minus)
         mtz_conf = calcMtzConf(clases, predictions, toTestClassColumn)
-
+        MsgBox("Accuracy: " & FormatPercent(getAccuracy(mtz_conf, toTest.Count)))
         Resultado.Show()
     End Sub
 

@@ -249,7 +249,6 @@
 
         Return accu
     End Function
-
     Public Sub divideDatasetForTesting(ByVal dataset As List(Of String()), ByRef toTrain As List(Of String()), ByRef toTest As List(Of String()), ByVal trainPercent As Double, ByVal testPercent As Double, ByVal startOfFor As Integer, ByVal minusFor As Integer)
         Dim rowCount = dataset.Count
         Dim totalToTrain = Math.Truncate(rowCount * trainPercent)
@@ -294,6 +293,7 @@
         Dim clsIndex, catIndex, toTestCount As Integer
         Dim max, chance As Double
         Dim classesCount As New List(Of Integer)
+        Dim i As Integer
 
         For Each oClass In classList
             classesCount.Add(getClassCount(toTestClassColumn, oClass))
@@ -301,33 +301,33 @@
         toTestCount = toTest.Count
 
         For n As Integer = 0 To toTestCount - 1
-            For i As Integer = start To toTest.ElementAt(n).Count - minus
-                If (IsNumeric(toTest.ElementAt(n).ElementAt(i))) Then
-                    catIndex = getCategoryIndex(toTest.ElementAt(n).ElementAt(i), listOfCategorias.ElementAt(i - start))
-                Else
-                    catIndex = getDiscretizedIndex(toTest.ElementAt(n).ElementAt(i), listOfCategorias.ElementAt(i - start))
+            max = 0
+            For j As Integer = 0 To classList.Count - 1
+                chance = calcChanceOfClass(toTest.ElementAt(n), listOfChances, listOfCategorias, j, start, minus) * (classesCount.ElementAt(j) / toTestCount)
+                If (max < chance) Then
+                    max = chance
+                    clsIndex = j
                 End If
-
-                max = 0
-                For j As Integer = 0 To classList.Count - 1
-                    chance = calcChanceOfClass(listOfChances, catIndex, j) * (classesCount.ElementAt(j) / toTestCount)
-                    If (max < chance) Then
-                        max = chance
-                        clsIndex = j
-                    End If
-                Next
             Next
-
             prediction.Add(classList.ElementAt(clsIndex))
         Next
         Return prediction
     End Function
 
-    Private Function calcChanceOfClass(ByRef listOfChances As List(Of List(Of List(Of Double))), ByVal catIndex As Integer, ByVal clsIndex As Integer) As Double
-        Dim chance As Double = listOfChances.ElementAt(0).ElementAt(clsIndex).ElementAt(catIndex)
-        For i As Integer = 1 To listOfChances.Count - 1
-            chance = chance * listOfChances.ElementAt(i).ElementAt(clsIndex).ElementAt(catIndex)
+    Private Function calcChanceOfClass(ByRef columns As String(), ByRef listOfChances As List(Of List(Of List(Of Double))), ByRef listOfCategorias As List(Of List(Of Double)), ByVal clsIndex As Integer, ByVal start As Integer, ByVal minus As Integer) As Double
+        Dim chance As Double = 1
+        Dim catIndex As Integer
+
+        For i As Integer = start To columns.Count - minus
+            If (IsNumeric(columns.ElementAt(i))) Then
+                catIndex = getCategoryIndex(columns.ElementAt(i), listOfCategorias.ElementAt(i - start))
+            Else
+                catIndex = getDiscretizedIndex(columns.ElementAt(i), listOfCategorias.ElementAt(i - start))
+            End If
+
+            chance = chance * listOfChances.ElementAt(i - start).ElementAt(clsIndex).ElementAt(catIndex)
         Next
+
         Return chance
     End Function
 
@@ -381,9 +381,8 @@
     End Function
 
     Public Sub calcDiscretizedColumn(ByRef datasetColumn As List(Of String), ByRef datasetClassColumn As List(Of String), ByRef categoryCountPerClass As List(Of List(Of Integer)), ByRef categoryList As List(Of Double), ByRef classList As List(Of String), ByVal classCount As Integer)
-        Dim range, catRange, max, min As Double
         Dim numericDatasetColumn = toListOfDouble(datasetColumn)
-
+        Dim clsIndex As Integer
         categoryCountPerClass = New List(Of List(Of Integer))
         categoryList = toListOfDouble(getClassList(datasetColumn))
 
@@ -397,8 +396,8 @@
         For i As Integer = 0 To numericDatasetColumn.Count - 1
             For j As Integer = 0 To categoryList.Count - 1
                 If (numericDatasetColumn.ElementAt(i) = categoryList.ElementAt(j)) Then
-                    Dim ind1 = getClassIndex(datasetClassColumn.ElementAt(i), classList)
-                    categoryCountPerClass.ElementAt(ind1).Item(j) += 1
+                    clsIndex = getClassIndex(datasetClassColumn.ElementAt(i), classList)
+                    categoryCountPerClass.ElementAt(clsIndex).Item(j) += 1
                     Exit For
                 End If
             Next

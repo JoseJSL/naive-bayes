@@ -22,9 +22,10 @@
     End Sub
 
     Private Sub loadMetrics()
-        Dim precision, recall, mf1, total
+        Dim precision, recall, mf1, totalPrecision, totalRecall, totalMF1 As Double
         Dim row As String
         Dim classCount = Form1.clases.Count
+        Dim i As Integer
 
         dgvMetrics.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells
         dgvMetrics.AutoSize = True
@@ -34,17 +35,26 @@
         dgvMetrics.Columns(1).HeaderText = "Recall"
         dgvMetrics.Columns(2).HeaderText = "Medida F1"
 
-        For i As Integer = 0 To classCount - 1
+        For i = 0 To classCount - 1
             precision = getPrecision(Form1.mtz_conf, i)
             recall = getRecall(Form1.mtz_conf, i)
             mf1 = getMF1(Form1.mtz_conf, i)
-            'MsgBox(precision & " - " & recall & " - " & mf1)
+
+            totalPrecision += precision
+            totalRecall += recall
+            totalMF1 += mf1
             row = FormatPercent(precision) & "," & FormatPercent(recall) & "," & FormatPercent(mf1)
 
             dgvMetrics.Rows.Insert(i, row.Split(","))
             dgvMetrics.Rows(i).HeaderCell.Value = Form1.clases.ElementAt(i)
             dgvMetrics.Rows(i).DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
         Next
+
+        row = FormatPercent(totalPrecision / Form1.clases.Count) & "," & FormatPercent(totalRecall / Form1.clases.Count) & "," & FormatPercent(totalMF1 / Form1.clases.Count)
+
+        dgvMetrics.Rows.Insert(i, row.Split(","))
+        dgvMetrics.Rows(i).HeaderCell.Value = "Promedio"
+        dgvMetrics.Rows(i).DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
     End Sub
 
     Private Sub Resultado_Load(sender As Object, e As EventArgs) Handles MyBase.Load
