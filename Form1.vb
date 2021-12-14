@@ -13,11 +13,13 @@
         Next
     End Sub
 
+    'Habilita y deshabilita las entradas de dataset externo / pruebas con el mismo dataset
     Private Sub rbSameDataset_CheckedChanged(sender As Object, e As EventArgs) Handles rbSameDataset.CheckedChanged
         gbSameDataset.Enabled = gbExternalDataset.Enabled
         gbExternalDataset.Enabled = Not gbExternalDataset.Enabled
     End Sub
 
+    'Carga el dataset principal con la ruta dada
     Private Sub btnLoadMainDataset_Click(sender As Object, e As EventArgs) Handles btnLoadMainDataset.Click 'Carga el dataset especificado en un cuadro de diálogo
         If (fileOpener.ShowDialog() = DialogResult.OK) Then 'Si el usuario presionó OK en el cuadro de diálogo
             If (System.IO.File.Exists(fileOpener.FileNames.GetValue(0))) Then ' y el archivo seleccionado existe, entonces
@@ -27,6 +29,7 @@
         End If
     End Sub
 
+    'Carga el dataset externo y se asegura que tenga el mismo número de columnas que el dataset principal
     Private Sub btnLoadExternalDataset_Click(sender As Object, e As EventArgs) Handles btnLoadExternalDataset.Click
         If (fileOpener.ShowDialog() = DialogResult.OK) Then
             If (System.IO.File.Exists(fileOpener.FileNames.GetValue(0))) Then
@@ -43,6 +46,7 @@
         End If
     End Sub
 
+    'Lee un archivo de texto linea por linea, y le asigna los valores a un dataser
     Private Sub loadDataset(ByRef dataset As List(Of String()))
         Dim fileReader As System.IO.StreamReader = My.Computer.FileSystem.OpenTextFileReader(fileOpener.FileNames.GetValue(0))
         Dim fileLine As String = fileReader.ReadLine()
@@ -70,6 +74,7 @@
         fileReader.Close()
     End Sub
 
+    'Determina si se puede realizar la acción de analizar (predecir) y manda mensajes de error según correspondan
     Private Function canAnalize() As Boolean
         If (Not mainDataset.Count > 1) Then 'Si no hay dataset principal
             MsgBox("No se ha cargado el dataset principal.", vbCritical, "Error en dataset vacio")
@@ -92,6 +97,8 @@
         Return True
     End Function
 
+    'Carga crea un listado de clases con el dataset principal, además pide confirmación al usuario sobre
+    'la posición de la columna de clases (en caso de encontrar que la columna dada contenga numeros)
     Private Function loadClases() As Boolean
         Dim classIndex = 0
         Dim classPosition = "primer"
@@ -122,6 +129,7 @@
         Return True
     End Function
 
+    'Manda a llamar a los métodos de cálculos según sea haya establecido el usuario (externo, cruzado, simple)
     Private Sub btnAnalizar_Click(sender As Object, e As EventArgs) Handles btnAnalizar.Click
         If (Not canAnalize()) Then
             Exit Sub
@@ -141,6 +149,8 @@
         End If
     End Sub
 
+    'Divide el dataset principal en dos datasets, uno de entrenamiento y otro de pruebas, según el porcentaje
+    'establecido por el usuario, y luego llama al calculo final con esos datasets de referencia
     Private Sub calcWithSameDataSet(ByVal trainPercent As Double, ByVal testPercent As Double)
         Dim toTrain As List(Of String())
         Dim toTest As List(Of String())
@@ -156,10 +166,13 @@
         calcularFinal(toTest, toTrain)
     End Sub
 
+    'Manda a llamar el calculo final con los dataset externo y principal como dataset de prueba y de
+    'entrenamiento respectivamente
     Private Sub calcWithExternalDataset()
         calcularFinal(externalDataset, mainDataset)
     End Sub
 
+    'Ensambla el cubo de OLAP de posibilidades y el listado de categorias para luego llamar al calculo de predicción
     Private Sub calcularFinal(ByRef toTest As List(Of String()), ByRef toTrain As List(Of String()))
         Dim listOfChances As New List(Of List(Of List(Of Double))) '-> I:Columna, J: Clase, K: Categoria
         Dim listOfCategories As New List(Of List(Of Double))

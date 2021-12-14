@@ -16,7 +16,7 @@
     'Modifica categoryCountPerClass y categoryList para que:
     '   - categoryCountPerClass lleve el conteo de cuántas veces se repite una categoría por cada clase
     '   - categoryList tenga el listado de categorias
-    'Esto por cada columna del Dataset, según la cantidad de intervalos especificados
+    'Esto por cada columna del Dataset, según la cantidad de intervalos especificados, con el método de anchos iguales
     Public Sub calcAnchosIguales(ByRef datasetColumn As List(Of String), ByRef datasetClassColumn As List(Of String), ByRef categoryCountPerClass As List(Of List(Of Integer)), ByRef categoryList As List(Of Double), ByRef classList As List(Of String), ByVal intervalCount As Integer, ByVal classCount As Integer)
         Dim range, catRange, max, min As Double
         Dim numericDatasetColumn As New List(Of Double)
@@ -57,6 +57,7 @@
         Next
     End Sub
 
+    'Regresa el conteo de una clase específica según una columna de un dataset
     Public Function getClassCount(ByRef datasetClassColumn As List(Of String), ByVal oClass As String) As Integer
         Dim count = 0
         For Each c In datasetClassColumn
@@ -68,6 +69,7 @@
         Return count
     End Function
 
+    'Calcula la probabilidad de que una categoria sea parte de una clase, en una sola columna de un dataset
     Public Function calcChanceOf(ByRef datasetClassColumn As List(Of String), ByRef categoryCountPerClass As List(Of List(Of Integer)), ByRef categoryList As List(Of Double), ByRef classList As List(Of String)) As List(Of List(Of Double))
         Dim chanceOf As New List(Of List(Of Double))
         Dim chance As Double
@@ -87,47 +89,7 @@
         Return chanceOf
     End Function
 
-    Public Function anchos_iguales(ByVal arreglo As List(Of String), ByVal n_intervalos As Integer) As List(Of Char)
-        Dim rango, max, min As Double
-        Dim arreglo_numero As New List(Of Double)
-
-        For Each num In arreglo
-            arreglo_numero.Add(CDbl(num))
-        Next
-
-        max = arreglo_numero.Max()
-        min = arreglo_numero.Min()
-
-
-        rango = (max - min) / n_intervalos
-
-        Dim arreglo_nuevo As New List(Of Char)
-        Dim cat As Double = min
-
-        'Vaciar arreglos de categorías antes de usar
-        categorias.Clear()
-        classCountPerCategory.Clear()
-
-        For i = 0 To n_intervalos - 1 Step 1
-            cat += rango
-            categorias.Add(cat)
-            classCountPerCategory.Add(0)
-        Next
-
-
-        For Each num In arreglo_numero
-            For i = 0 To n_intervalos - 1 Step 1
-                If num < categorias.ElementAt(i) Then
-                    arreglo_nuevo.Add(Chr(65 + i))
-                    classCountPerCategory.Item(i) += 1
-                    Exit For
-                End If
-            Next
-        Next
-
-        Return arreglo_nuevo
-    End Function
-
+    'Regresa un listado de las clases de una columna de un dataset (clases unicas)
     Public Function getClassList(ByRef classArray As List(Of String)) As List(Of String)
         Dim classList As New List(Of String)
 
@@ -140,6 +102,7 @@
         Return classList
     End Function
 
+    'Calcula la matriz de confusión, según un arreglo de predicciones y el arreglo original de clases
     Public Function calcMtzConf(ByRef clases As List(Of String), ByRef predict As List(Of String), ByRef original As List(Of String)) As List(Of List(Of Integer))
         Dim mtz_conf As New List(Of List(Of Integer))
         Dim ico, ifi As Integer
@@ -152,7 +115,6 @@
         Next
 
         For i = 0 To predict.Count - 1
-            'MsgBox(predict.ElementAt(i) & " == " & original.ElementAt(i))
             If predict.ElementAt(i) = original.ElementAt(i) Then
                 ico = getClassIndex(predict.ElementAt(i), clases)
                 mtz_conf.Item(ico).Item(ico) += 1
@@ -166,10 +128,12 @@
         Return mtz_conf
     End Function
 
+    'Regresa el True Positive de la matriz de confusión, del índice especificado
     Public Function getTP(ByRef mtz_conf As List(Of List(Of Integer)), ByRef ind As Integer) As Integer
         Return mtz_conf.ElementAt(ind).ElementAt(ind)
     End Function
 
+    'Regresa el True Negative de la matriz de confusión, del índice especificado
     Public Function getTN(ByRef mtz_conf As List(Of List(Of Integer)), ByRef ind As Integer) As Integer
         Dim trun As Double
 
@@ -184,6 +148,7 @@
         Return trun
     End Function
 
+    'Regresa el False Positive de la matriz de confusión, del índice especificado
     Public Function getFP(ByRef mtz_conf As List(Of List(Of Integer)), ByRef inf As Integer) As Integer
         Dim falp As Double
 
@@ -196,6 +161,7 @@
         Return falp
     End Function
 
+    'Regresa el Flase Negative de la matriz de confusión, del índice especificado
     Public Function getFN(ByRef mtz_conf As List(Of List(Of Integer)), ByRef inc As Integer) As Integer
         Dim faln As Double
 
@@ -208,6 +174,7 @@
         Return faln
     End Function
 
+    'Regresa la Precisión de la matriz de confusión, del índice especificado
     Public Function getPrecision(ByRef mtz_conf As List(Of List(Of Integer)), ByRef ind As Integer) As Double
         Dim preci, trupo As Double
 
@@ -217,6 +184,7 @@
         Return preci
     End Function
 
+    'Regresa el Recall de la matriz de confusión, del índice especificado
     Public Function getRecall(ByRef mtz_conf As List(Of List(Of Integer)), ByRef ind As Integer) As Double
         Dim rec, trupo As Double
 
@@ -226,6 +194,7 @@
         Return rec
     End Function
 
+    'Regresa la Medida F1 de la matriz de confusión, del índice especificado
     Public Function getMF1(ByRef mtz_conf As List(Of List(Of Integer)), ByRef ind As Integer) As Double
         Dim medf, preci, recal As Double
 
@@ -237,6 +206,7 @@
         Return medf
     End Function
 
+    'Regresa el Accuracy de la matriz de confusión
     Public Function getAccuracy(ByRef mtz_conf As List(Of List(Of Integer)), ByRef totalFilas As Integer) As Double
         Dim accu As Double
         Dim tepes As Integer
@@ -249,6 +219,9 @@
 
         Return accu
     End Function
+
+    'Divide un dataset en dos dataset diferentes, según el porcentaje de entrenamiento y de pruebas. Mezcla
+    'el dataset original para tomar indices aleatorios para los nuevos dataset de entrenamiento y de prueba
     Public Sub divideDatasetForTesting(ByVal dataset As List(Of String()), ByRef toTrain As List(Of String()), ByRef toTest As List(Of String()), ByVal trainPercent As Double, ByVal testPercent As Double, ByVal startOfFor As Integer, ByVal minusFor As Integer)
         Dim rowCount = dataset.Count
         Dim totalToTrain = Math.Truncate(rowCount * trainPercent)
@@ -272,6 +245,7 @@
         Next
     End Sub
 
+    'Mezcla un dataset de manera aleatoria
     Private Sub shuffleList(ByRef data As List(Of String()))
         Randomize()
         Dim j, count As Integer
@@ -288,9 +262,12 @@
         Next
     End Sub
 
+    'Calcula el arreglo de predicciones, utilizando un dataset de prueba, un cubo de OLAP con probabilidades y
+    'un listado de categorias por columna. Insertando en el arreglo de predicciones qué clase tiene más
+    'probabilidad de ser correcta
     Public Function calcPredictions(ByRef toTest As List(Of String()), ByRef listOfChances As List(Of List(Of List(Of Double))), ByRef listOfCategorias As List(Of List(Of Double)), ByRef classList As List(Of String), ByRef toTestClassColumn As List(Of String), ByVal start As Integer, ByVal minus As Integer) As List(Of String)
         Dim prediction As New List(Of String)
-        Dim clsIndex, catIndex, toTestCount As Integer
+        Dim clsIndex, toTestCount As Integer
         Dim max, chance As Double
         Dim classesCount As New List(Of Integer)
         Dim i As Integer
@@ -314,6 +291,8 @@
         Return prediction
     End Function
 
+    'Calcula la probabilidad de que una fila de datos sea de una clase dada, utilizando un cubo de OLAP con
+    'probabilades y un listado de categorias por columna
     Private Function calcChanceOfClass(ByRef columns As String(), ByRef listOfChances As List(Of List(Of List(Of Double))), ByRef listOfCategorias As List(Of List(Of Double)), ByVal clsIndex As Integer, ByVal start As Integer, ByVal minus As Integer) As Double
         Dim chance As Double = 1
         Dim catIndex As Integer
@@ -331,6 +310,7 @@
         Return chance
     End Function
 
+    'Obtiene el índice de la categoría a la que pertenece un elemento de tipo numerico
     Public Function getCategoryIndex(ByVal elementValue As String, ByRef categoryList As List(Of Double)) As Integer
         For i As Integer = 0 To categoryList.Count - 1
             If (CDbl(elementValue) < categoryList.ElementAt(i)) Then
@@ -341,6 +321,8 @@
         Return categoryList.Count - 1
     End Function
 
+    'Obtiene el índice de la categoría a la que pertenece un elemento de tipo discretizado, convirtiendo
+    'el valor de la cadena en doble, y comparando que sea igual a una de el listado de categorias
     Public Function getDiscretizedIndex(ByVal elementValue As String, ByRef categoryList As List(Of Double)) As Integer
         For i As Integer = 0 To categoryList.Count - 1
             'MsgBox($"{strToDouble(elementValue)} = {categoryList.ElementAt(i)} -- {strToDouble(elementValue) = categoryList.ElementAt(i)} ")
@@ -352,6 +334,7 @@
         Return categoryList.Count - 1
     End Function
 
+    'Obtiene el índice una clásica específica en una listado de categorias
     Public Function getClassIndex(ByVal elementValue As String, ByRef classList As List(Of String)) As Integer
         For i As Integer = 0 To classList.Count - 1
             If (elementValue = classList.ElementAt(i)) Then
@@ -362,6 +345,7 @@
         Return -1
     End Function
 
+    'Convierte una cadena en numeros flotante, utilizando la suma de cada uno de sus caracteres
     Public Function strToDouble(ByVal oStr As String) As Double
         Dim sum = 0
         For Each c As Char In oStr
@@ -370,16 +354,19 @@
         Return sum
     End Function
 
-    'Convierte una lista de string en una lista de dobles, sumando el ascii de cada caracter
+    'Convierte una lista de string en una lista de numeros flotante
     Public Function toListOfDouble(ByVal list As List(Of String)) As List(Of Double)
         Dim listOfDouble As New List(Of Double)
-        Dim sum As Double
         For Each oStr As String In list
             listOfDouble.Add(strToDouble(oStr))
         Next
         Return listOfDouble
     End Function
 
+    'Modifica categoryCountPerClass y categoryList para que:
+    '   - categoryCountPerClass lleve el conteo de cuántas veces se repite un atributo discretizado por clase
+    '   - categoryList tenga el listado de cada atributo discretizado
+    'Esto por cada columna del Dataset, y transformando las cadenas a numeros flotantes (para compatibilidad)
     Public Sub calcDiscretizedColumn(ByRef datasetColumn As List(Of String), ByRef datasetClassColumn As List(Of String), ByRef categoryCountPerClass As List(Of List(Of Integer)), ByRef categoryList As List(Of Double), ByRef classList As List(Of String), ByVal classCount As Integer)
         Dim numericDatasetColumn = toListOfDouble(datasetColumn)
         Dim clsIndex As Integer
@@ -403,6 +390,5 @@
             Next
         Next
     End Sub
-
 
 End Module
