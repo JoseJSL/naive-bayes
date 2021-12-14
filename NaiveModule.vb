@@ -300,12 +300,12 @@
         Next
         toTestCount = toTest.Count
 
-        For n As Integer = 0 To toTestCount - 1 'Reemplazar .Count por Minus
+        For n As Integer = 0 To toTestCount - 1
             For i As Integer = start To toTest.ElementAt(n).Count - minus
-                If (start = 1) Then
-                    catIndex = getCategoryIndex(toTest.ElementAt(n).ElementAt(i), listOfCategorias.ElementAt(i - 1))
+                If (IsNumeric(toTest.ElementAt(n).ElementAt(i))) Then
+                    catIndex = getCategoryIndex(toTest.ElementAt(n).ElementAt(i), listOfCategorias.ElementAt(i - start))
                 Else
-                    catIndex = getCategoryIndex(toTest.ElementAt(n).ElementAt(i), listOfCategorias.ElementAt(i))
+                    catIndex = getDiscretizedIndex(toTest.ElementAt(n).ElementAt(i), listOfCategorias.ElementAt(i - start))
                 End If
 
                 max = 0
@@ -325,9 +325,7 @@
 
     Private Function calcChanceOfClass(ByRef listOfChances As List(Of List(Of List(Of Double))), ByVal catIndex As Integer, ByVal clsIndex As Integer) As Double
         Dim chance As Double = listOfChances.ElementAt(0).ElementAt(clsIndex).ElementAt(catIndex)
-        Dim currentChance As Double
         For i As Integer = 1 To listOfChances.Count - 1
-            currentChance = listOfChances.ElementAt(i).ElementAt(clsIndex).ElementAt(catIndex)
             chance = chance * listOfChances.ElementAt(i).ElementAt(clsIndex).ElementAt(catIndex)
         Next
         Return chance
@@ -336,6 +334,17 @@
     Public Function getCategoryIndex(ByVal elementValue As String, ByRef categoryList As List(Of Double)) As Integer
         For i As Integer = 0 To categoryList.Count - 1
             If (CDbl(elementValue) < categoryList.ElementAt(i)) Then
+                Return i
+            End If
+        Next
+
+        Return categoryList.Count - 1
+    End Function
+
+    Public Function getDiscretizedIndex(ByVal elementValue As String, ByRef categoryList As List(Of Double)) As Integer
+        For i As Integer = 0 To categoryList.Count - 1
+            'MsgBox($"{strToDouble(elementValue)} = {categoryList.ElementAt(i)} -- {strToDouble(elementValue) = categoryList.ElementAt(i)} ")
+            If (strToDouble(elementValue) = categoryList.ElementAt(i)) Then
                 Return i
             End If
         Next
@@ -352,5 +361,49 @@
 
         Return -1
     End Function
+
+    Public Function strToDouble(ByVal oStr As String) As Double
+        Dim sum = 0
+        For Each c As Char In oStr
+            sum += Asc(c)
+        Next
+        Return sum
+    End Function
+
+    'Convierte una lista de string en una lista de dobles, sumando el ascii de cada caracter
+    Public Function toListOfDouble(ByVal list As List(Of String)) As List(Of Double)
+        Dim listOfDouble As New List(Of Double)
+        Dim sum As Double
+        For Each oStr As String In list
+            listOfDouble.Add(strToDouble(oStr))
+        Next
+        Return listOfDouble
+    End Function
+
+    Public Sub calcDiscretizedColumn(ByRef datasetColumn As List(Of String), ByRef datasetClassColumn As List(Of String), ByRef categoryCountPerClass As List(Of List(Of Integer)), ByRef categoryList As List(Of Double), ByRef classList As List(Of String), ByVal classCount As Integer)
+        Dim range, catRange, max, min As Double
+        Dim numericDatasetColumn = toListOfDouble(datasetColumn)
+
+        categoryCountPerClass = New List(Of List(Of Integer))
+        categoryList = toListOfDouble(getClassList(datasetColumn))
+
+        For i As Integer = 0 To classCount - 1
+            categoryCountPerClass.Add(New List(Of Integer))
+            For j As Integer = 0 To categoryList.Count - 1
+                categoryCountPerClass.Item(i).Add(0)
+            Next
+        Next
+
+        For i As Integer = 0 To numericDatasetColumn.Count - 1
+            For j As Integer = 0 To categoryList.Count - 1
+                If (numericDatasetColumn.ElementAt(i) = categoryList.ElementAt(j)) Then
+                    Dim ind1 = getClassIndex(datasetClassColumn.ElementAt(i), classList)
+                    categoryCountPerClass.ElementAt(ind1).Item(j) += 1
+                    Exit For
+                End If
+            Next
+        Next
+    End Sub
+
 
 End Module

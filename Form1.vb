@@ -104,7 +104,7 @@
         End If
 
         If (IsNumeric(mainDataset.ElementAt(0).ElementAt(classIndex))) Then
-            Dim q = MsgBox($"Se ha detectado un numero en el indice de la clase ({classPosition} columna).{vbCrLf}¿Quiere la posición de la clase a la {alternatePosition} columna?", vbYesNo, "Error en dataset vacio")
+            Dim q = MsgBox($"Se ha detectado un numero en el indice de la clase ({classPosition} columna).{vbCrLf}¿Quiere cambiar la posición de la clase a la {alternatePosition} columna?", vbYesNo, "Error en dataset vacio")
             If (q = MsgBoxResult.Yes) Then
                 If (classIndex = 0) Then
                     classIndex = mainDataset.ElementAt(0).Count - 1
@@ -157,7 +157,7 @@
     End Sub
 
     Private Sub calcWithExternalDataset()
-        calcularFinal(mainDataset, externalDataset)
+        calcularFinal(externalDataset, mainDataset)
     End Sub
 
     Private Sub calcularFinal(ByRef toTest As List(Of String()), ByRef toTrain As List(Of String()))
@@ -179,11 +179,12 @@
             datasetColumn = getDatasetColumn(toTrain, i)
             If (IsNumeric(datasetColumn.ElementAt(i))) Then
                 calcAnchosIguales(datasetColumn, toTrainClassColumn, categoryCountPerClass, categoryList, clases, CInt(txtIntervals.Text), clases.Count)
-                listOfCategories.Add(categoryList)
-                listOfChances.Add(calcChanceOf(toTrainClassColumn, categoryCountPerClass, categoryList, clases))
             Else
-                'ya está categorizada
+                calcDiscretizedColumn(datasetColumn, toTrainClassColumn, categoryCountPerClass, categoryList, clases, clases.Count)
             End If
+
+            listOfCategories.Add(categoryList)
+            listOfChances.Add(calcChanceOf(toTrainClassColumn, categoryCountPerClass, categoryList, clases))
         Next
 
         Dim toTestClassColumn = getDatasetColumn(toTest, classIndex)
