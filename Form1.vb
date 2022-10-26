@@ -88,8 +88,13 @@
                     Return False
                 End If
             ElseIf (rbExternalDataset.Checked) Then
-                If (Not externalDataset.Count > 1) Then 'Si no hay dataser externo
+                If (Not externalDataset.Count > 1) Then 'Si no hay dataset externo
                     MsgBox("No se ha cargado el dataset externo.", vbCritical, "Error en dataset vacio")
+                    Return False
+                End If
+
+                If (mainDataset.ElementAt(0).Count <> externalDataset.ElementAt(0).Count) Then 'Si los datasets no son compatibles
+                    MsgBox("Los datasets cargados no son compatibles.", vbCritical, "Error de compatibilidad de datasets")
                     Return False
                 End If
             End If
@@ -111,7 +116,7 @@
         End If
 
         If (IsNumeric(mainDataset.ElementAt(0).ElementAt(classIndex))) Then
-            Dim q = MsgBox($"Se ha detectado un numero en el indice de la clase ({classPosition} columna).{vbCrLf}¿Quiere cambiar la posición de la clase a la {alternatePosition} columna?", vbYesNo, "Error en dataset vacio")
+            Dim q = MsgBox($"Se ha detectado un numero en el indice de la clase ({classPosition} columna).{vbCrLf}¿Quiere cambiar la posición de la clase a la {alternatePosition} columna?", vbYesNo, "Incongruencia de clase")
             If (q = MsgBoxResult.Yes) Then
                 If (classIndex = 0) Then
                     classIndex = mainDataset.ElementAt(0).Count - 1
