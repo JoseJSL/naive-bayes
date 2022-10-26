@@ -1,0 +1,13 @@
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\bin\Debug\Naives Bayes.exe.config
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\bin\Debug\Naives Bayes.exe
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\bin\Debug\Naives Bayes.pdb
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\bin\Debug\Naives Bayes.xml
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\obj\Debug\Naives Bayes.vbproj.AssemblyReference.cache
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\obj\Debug\Naives_Bayes.Form1.resources
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\obj\Debug\Naives_Bayes.Resources.resources
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\obj\Debug\Naives Bayes.vbproj.GenerateResource.cache
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\obj\Debug\Naives Bayes.vbproj.CoreCompileInputs.cache
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\obj\Debug\Naives Bayes.exe
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\obj\Debug\Naives Bayes.xml
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\obj\Debug\Naives Bayes.pdb
+C:\Users\Admin\Documents\Universidad\Semestre 7\Sistemas de apoyo a la decisión\Tareas\Algoritmo Naive Bayes\Naives Bayes\obj\Debug\Naives_Bayes.Resultado.resources
